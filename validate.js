@@ -64,7 +64,7 @@ class validate{
                 youtubeLink :"Youtube Link" ,
                 whitespace :"No whitespace",
                 empty :"No Empty",
-                matchTo :"Matched One",
+                matchTo :"Matched to",
                 matchToAll :"Matched All",
                 duplicate :"No Duplicate",
 
@@ -233,28 +233,46 @@ class validate{
         if(this.value.length > 0){
 
         let  filterMatch = $(this.option.matchTo).toArray().filter(item =>  this.elem.value === item.value && item )
-   
         $(this.option.matchTo).removeClass("input-error")
         $(this.option.matchTo).removeClass("input-valid")
 
-        if(filterMatch.length > 0){
-            filterMatch.forEach((item)=>{
+            if(filterMatch.length > 0){
+                filterMatch.forEach((item)=>{
+              
+                    $(item).addClass("input-valid")
+                })
 
-                $(item).addClass("input-valid")
+                this.checkingText('matchTo',`Matched`)
+                this.res.optionList.match = true
+                this.res.optionList.matchLength = filterMatch.length
+
+                return true
+            }else{
+
+                 $(this.option.matchTo).addClass("input-error")
+
+                this.unCheckingText('matchTo')
+                this.res.optionList.match = false
+                this.res.optionList.matchLength = 0
+
+                return false
+            }
+
+        }else if(this.value.length === 0){
+            $(this.option.matchTo).each((i,item)=>{
+                if(item.value.length > 0){
+
+                    $(item).addClass("input-error")
+                }
+
             })
 
-            this.checkingText('matchTo')
-            this.res.optionList.match = true
-            return true
-        }else{
-            $(this.option.matchTo).addClass("input-error")
 
-            this.unCheckingText('matchTo')
             this.res.optionList.match = false
+            this.res.optionList.matchLength = 0
 
-            return false
+            return false 
         }
-    }
     }
 
     matchAll(){
@@ -298,11 +316,12 @@ class validate{
         }
     }
 
-    checkingText(section ){
+    checkingText(section ,textAlt = ''){
 
+        let textDisplay = textAlt.length === 0 ? this.lang[section] :textAlt
         let elemCheck =  document.querySelector(`#validate-check-${section}-${this._id}`)
         if(elemCheck){
-            elemCheck.innerHTML = `<i class="fa-solid fa-check"></i> | ${this.lang[section]}`
+            elemCheck.innerHTML = `<i class="fa-solid fa-check"></i> | ${textDisplay}`
             elemCheck.classList.add("text-valid")
             elemCheck.classList.remove("text-error")
         }
@@ -310,11 +329,13 @@ class validate{
     }
 
    
-    unCheckingText(section){
+    unCheckingText(section , textAlt = ''){
+
+        let textDisplay = textAlt.length === 0 ? this.lang[section] :textAlt
 
         let elemCheck =  document.querySelector(`#validate-check-${section}-${this._id}`)
         if(elemCheck){
-            elemCheck.innerHTML = `<i class="fa-solid fa-xmark"></i> | ${this.lang[section]}`
+            elemCheck.innerHTML = `<i class="fa-solid fa-xmark"></i> | ${textDisplay}`
             elemCheck.classList.add("text-error")
             elemCheck.classList.remove("text-valid")
         }
@@ -698,6 +719,9 @@ function checkUserRegist(value){
     return  false
 }
 
+//* matchTo : check is any input is matched
+//* matchAll : check is all input is matched
+
 
 let username = document.querySelector('#username').validate({matchTo : '#password',matchToAll : '.password-check',duplicate : checkUserRegist},'.validationText')
 let password = document.querySelector('#password').validate({matchTo : '#username'})
@@ -705,7 +729,7 @@ let password = document.querySelector('#password').validate({matchTo : '#usernam
 
 username.setLang('en')
 
-username.replaceOptionText({duplicate:"Test No Duplicate"})
+
 
 username.initEvent('keyup',(res)=>{
 
