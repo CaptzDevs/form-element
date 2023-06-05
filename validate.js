@@ -1,5 +1,6 @@
+function _init(){
 
-// creat
+// Main
 class validate{
 
     constructor(elem,option = {},elemCheckText){
@@ -43,7 +44,8 @@ class validate{
 
         }
 
-        this.lang = {
+        this.lang = {}
+        this.langSet = {
             en : {
                 length :  `At least ${this.option.length} charecters`,
                 startWithNumber :   'Start with number',
@@ -66,12 +68,35 @@ class validate{
                 matchToAll :"Matched All",
                 duplicate :"No Duplicate",
 
+            },
+            "th": {
+                length: `อย่างน้อย ${this.option.length} ตัวอักษร`,
+                startWithNumber: "เริ่มต้นด้วยตัวเลข",
+                startWithUpperCase: "เริ่มต้นด้วยตัวพิมพ์ใหญ่",
+                startWithLowerCase: "เริ่มต้นด้วยตัวพิมพ์เล็ก",
+                startWithSpecialCharecter: "เริ่มต้นด้วยอักขระพิเศษ",
+                noNumber: "ไม่มีตัวเลข",
+                noUpperCase: "ไม่มีตัวพิมพ์ใหญ่",
+                noLowerCase: "ไม่มีตัวพิมพ์เล็ก",
+                noSpecialCharecter: "ไม่มีอักขระพิเศษ",
+                containsNumber: "มีตัวเลข",
+                containsUpperCase: "มีตัวพิมพ์ใหญ่",
+                containsLowerCase: "มีตัวพิมพ์เล็ก",
+                containsSpecialCharecter: "มีอักขระพิเศษ",
+                email: "อีเมล",
+                youtubeLink: "ลิงก์ยูทูป",
+                whitespace: "ไม่มีช่องว่าง",
+                empty: "ห้ามว่าง",
+                matchTo: "เข้ากัน",
+                matchToAll: "เข้ากันทั้งหมด",
+                duplicate: "ไม่มีค่าที่ซ้ำกัน"
             }
+        
 
         }
 
         this.newLang = {}
-
+        this.defaultLang = 'en'
         this.optionArr = []
         this.res = {
 
@@ -98,22 +123,28 @@ class validate{
     }
 
  
-    initLang(lang,newLangOption){
+    replaceOptionText(newLangOption){
 
         for(let item in newLangOption){
-            this.lang[lang][item]  = newLangOption[item]
+            this.langSet[ this.defaultLang ][ item ]  = newLangOption[item]
         }
         
         this.renderText()
     }
 
-    renderText(){
+    setLang(lang){
+        this.defaultLang = lang
+        this.lang = this.langSet[lang]
+
+        this.renderText()
+    }
+
+    renderText(lang = 'en'){
         if(this.elemCheckText != '._none_'){
             let validateText = document.querySelector(this.elemCheckText)
             validateText.innerHTML = ''
 
             this.optionArr.forEach((item,i)=>{
-                console.log(`${i+1} : ${item}`)
 
                 this.renderCheckText(validateText,item)
             })
@@ -122,12 +153,11 @@ class validate{
 
     
     renderCheckText(validateText,optionText,stateIcon = this.stateIconUnCheck){
-
         if(validateText){
 
             validateText.insertAdjacentHTML("afterbegin",
     
-            ` <span id="validate-check-${optionText}-${this._id}">${stateIcon} ${this.lang.en[optionText]}</span>`
+            ` <span id="validate-check-${optionText}-${this._id}">${stateIcon} ${this.lang[optionText]}</span>`
             
             )
         }
@@ -272,7 +302,7 @@ class validate{
 
         let elemCheck =  document.querySelector(`#validate-check-${section}-${this._id}`)
         if(elemCheck){
-            elemCheck.innerHTML = `<i class="fa-solid fa-check"></i> | ${this.lang.en[section]}`
+            elemCheck.innerHTML = `<i class="fa-solid fa-check"></i> | ${this.lang[section]}`
             elemCheck.classList.add("text-valid")
             elemCheck.classList.remove("text-error")
         }
@@ -284,7 +314,7 @@ class validate{
 
         let elemCheck =  document.querySelector(`#validate-check-${section}-${this._id}`)
         if(elemCheck){
-            elemCheck.innerHTML = `<i class="fa-solid fa-xmark"></i> | ${this.lang.en[section]}`
+            elemCheck.innerHTML = `<i class="fa-solid fa-xmark"></i> | ${this.lang[section]}`
             elemCheck.classList.add("text-error")
             elemCheck.classList.remove("text-valid")
         }
@@ -650,6 +680,14 @@ Object.prototype.validate = function (option,elemCheckText) {
     return d
 }
 
+}
+
+//* init function
+
+_init()
+
+//*----------------------------------------------------------------------
+//* function callback for check duplicate
 
 function checkUserRegist(value){
 
@@ -658,22 +696,16 @@ function checkUserRegist(value){
     }
     
     return  false
-
 }
+
 
 let username = document.querySelector('#username').validate({matchTo : '#password',matchToAll : '.password-check',duplicate : checkUserRegist},'.validationText')
 let password = document.querySelector('#password').validate({matchTo : '#username'})
 
 
+username.setLang('en')
 
-String.prototype.replaceAt = function(index, replacement) {
-    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
-}
-
-
-
-username.initLang('en',{duplicate:"Test No Duplicate"})
-
+username.replaceOptionText({duplicate:"Test No Duplicate"})
 
 username.initEvent('keyup',(res)=>{
 
