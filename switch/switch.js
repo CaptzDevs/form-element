@@ -142,26 +142,31 @@ class SwitchButton{
 Element.prototype.SwitchButton = function (option) {
 
     let d
+    let arr = []
 
     [this].forEach((item, i) => {
-        d =  new SwitchButton(item)
+        arr.push(new SwitchButton(item))
+
     })
 
-    return d
+    return arr
 
 }
 
 Object.prototype.SwitchButton = function(option) {
 
     let d
+    let arr = []
 
     this.forEach((item,i)=>{
-         d =  new SwitchButton(item)
+        arr.push(new SwitchButton(item))
     })
     
-    return d
+    return arr
 }
 
 
 
-document.querySelectorAll('.switch-btn').SwitchButton()
+let switchBtn = document.querySelectorAll('.switch-btn').SwitchButton()
+
+console.log(switchBtn)
