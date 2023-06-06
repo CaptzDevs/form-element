@@ -73,9 +73,11 @@
 
     }
 
+    .validate-zone{
+        padding: 10px;
+    }
     .validationText{
         width: 350px;
-        margin-top: 20px;
         display: flex;
         align-items: flex-start;
         justify-content: flex-start;
@@ -89,7 +91,9 @@
    <main>
         <input class="input-validate" type="text" id="username" value="">
 
-       <input class="input-validate password-check" type="text" id="password" value="">
+       <input class="input-validate" type="password" id="password" value="">
+       <input class="input-validate" type="password" id="confirm-password" value="">
+
     <!--    <input class="input-validate password-check" type="text" id="password" value="">
         <input class="input-validate password-check" type="text" id="password" value="">
         <input class="input-validate password-check" type="text" id="password" value="">
@@ -99,10 +103,12 @@
 
 
 
-        <section class="validationText">
-        
-
+        <section class="validate-zone">
+            <section class="validationText" id="vt1"></section>
+            <section class="validationText" id="vt2"></section>
+            <section class="validationText" id="vt3"></section>
         </section>
+
         
    </main>
 
