@@ -1,0 +1,37 @@
+.input-validate{
+    border-radius: 5px;
+    padding: 5px;
+
+}
+
+
+.input-valid{
+    border: 5px solid var(--green4);
+}
+.input-error{
+    border: 5px solid var(--red4);
+}
+
+.text-valid{
+    color: var(--green4);
+    transition: color 0s;
+}
+
+.text-error{
+    color: var(--red);
+    transition: color 0s;
+
+}
+
+.validate-zone{
+    padding: 10px;
+}
+.validationText{
+    width: 350px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    color: #f1f1f1;
+    font-size: .9rem;
+}

@@ -9,7 +9,8 @@
     <title>Document</title>
 </head>
 <style>
-@import url('./validate/validate.css');
+    
+@import url('./switch/switch.css');
 
        ::-webkit-scrollbar {
   width: 0px;
@@ -44,6 +45,7 @@
         background: var(--gray-900);
 
     }
+    
     main{
         height: 100vh;
         display: flex;
@@ -52,36 +54,16 @@
         flex-direction: column;
         gap: 10px;
     }
-  
-
 </style>
 <body>
    <main>
-        <input class="input-validate" type="text" id="username" value="">
-
-       <input class="input-validate" type="password" id="password" value="">
-       <input class="input-validate" type="password" id="confirm-password" value="">
-
-    <!--    <input class="input-validate password-check" type="text" id="password" value="">
-        <input class="input-validate password-check" type="text" id="password" value="">
-        <input class="input-validate password-check" type="text" id="password" value="">
-        <input class="input-validate password-check" type="text" id="password" value="">
-        <input class="input-validate password-check" type="text" id="password" value="">
-        <input class="input-validate password-check" type="text" id="password" value=""> -->
-
-
-
-        <section class="validate-zone">
-            <section class="validationText" id="vt1"></section>
-            <section class="validationText" id="vt2"></section>
-            <section class="validationText" id="vt3"></section>
-        </section>
-
-        
+    <input class="switch-btn" data-state="true" type="button" id="switchButton1" value="">
+    <input class="switch-btn" data-state="false" type="button" id="switchButton2" value="">
+    <input class="switch-btn" data-state="true" type="button" id="switchButton3" value="">
    </main>
 
 </body>
 <script src="../assets/plugin/jquery/jquery-3.6.0.min.js"></script>
 <script src="../assets/plugin/fontawesome/all.min.js"></script>
-<script src="./validate/validate.js"></script>
+<script src="./switch/switch.js"></script>
 </html>
