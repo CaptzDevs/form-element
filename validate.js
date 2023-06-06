@@ -206,25 +206,20 @@ class validate{
 
         this.maxOption  = this.optionArr.length
 
-        console.log("+------------------------------------+")
-        console.log(`Includes ${this.optionArr.length} / ${c} Options`)
         
         this.renderText()
 
-        console.log("+------------------------------------+")
 
         this.initEvent('change')
         this.initEvent('keyup')
         this.initEvent('paste')
 
         this.elem.addEventListener('checkMatch',(e)=>{
-           /*  console.log('checkMatch Trigger !!!') */
           this.match()
           
         })
 
         this.elem.addEventListener('checkMatchAll',(e)=>{
-         /*    console.log('checkMatchAll Trigger !!!') */
           this.matchAll()
           
         })
@@ -391,7 +386,6 @@ class validate{
             
             //* necessary  option
             if(value.length >= this.option.length && this.option.length > -1){
-                console.log('✅ | Length')
                 this.checkingText('length')
                 this.res.optionList.length = true
                 pass++
@@ -403,7 +397,6 @@ class validate{
             }
 
             if(value.length > 0 ){
-                console.log('✅ | No Empty')
                 this.checkingText('empty')
                 this.res.optionList.empty = true
 
@@ -416,7 +409,6 @@ class validate{
 
 
             if(whitespace.test(value) && value.length > 0 ){
-                console.log("✅ | No white space ")
                 this.checkingText('whitespace')
                 this.res.optionList.whitespace = true
                 
@@ -430,7 +422,6 @@ class validate{
             //*------------------------------------------------------------------
 
             if(this.match() && this.option.matchTo && this.elem.value.length > 0){
-                console.log('✅ | matchTo')
 
                 $(this.option.matchTo).on('change, keyup',(e)=>{
                
@@ -452,7 +443,6 @@ class validate{
             //*------------------------------------------------------------------
 
             if(this.matchAll() && this.option.matchToAll && this.elem.value.length > 0){
-                console.log('✅ | matchToAll')
 
                 $(this.option.matchToAll).on('change, keyup',(e)=>{
                         this.elem.dispatchEvent(new Event('checkMatchAll'))
@@ -473,7 +463,6 @@ class validate{
             //*------------------------------------------------------------------
 
             if( typeof this.option.duplicate === 'function' && this.checkDuplicate(this.option.duplicate(this.value))){
-                console.log('✅ | Duplicate')
                 this.res.optionList.duplicate = false
                 pass++
 
@@ -497,7 +486,6 @@ class validate{
             //*----------------------------------------------
 
             if(startWithNumber.test(value) && this.option.startWithNumber){
-                console.log("✅ | startWith Number")
                 this.checkingText('startWithNumber')
                 this.res.optionList.startWithNumber = true
 
@@ -510,7 +498,6 @@ class validate{
             if(startWithUpperCase.test(value) && this.option.startWithUpperCase){
 
             this.res.optionList.startWithNumber = false
-                console.log("✅ | startWith UpperCase ")
                 this.res.optionList.startWithUpperCase = true
 
                 this.checkingText('startWithUpperCase')
@@ -521,7 +508,6 @@ class validate{
             }
 
             if(startWithLowerCase.test(value) && this.option.startWithLowerCase){
-                console.log("✅ | startWith LowerCase ")
                 this.res.optionList.startWithLowerCase = true
 
                 this.checkingText('startWithLowerCase')
@@ -533,7 +519,6 @@ class validate{
 
             if(startWithSpecialCharecter.test(value) && this.option.startWithSpecialCharecter){
 
-                console.log("✅ | startWith )cter ")
                 this.res.optionList.startWithNumber = true
 
                 this.checkingText('startWithSpecialCharecter')
@@ -546,7 +531,6 @@ class validate{
             //*----------------------------------------------
 
             if(noNumber.test(value) && this.option.noNumber){
-                console.log("✅ | no Number")
                 this.res.optionList.noNumber = true
                 this.checkingText('noNumber')
                 pass++
@@ -556,7 +540,6 @@ class validate{
             }
 
             if(noUpperCase.test(value) && this.option.noUpperCase){
-                console.log("✅ | no UpperCase ")
                 this.res.optionList.noUpperCase = true
 
                 this.checkingText('noUpperCase')
@@ -567,7 +550,6 @@ class validate{
             }
 
             if(noLowerCase.test(value) && this.option.noLowerCase){
-                console.log("✅ | no LowerCase ")
                 this.res.optionList.noLowerCase = true
 
                 this.checkingText('noLowerCase')
@@ -578,7 +560,6 @@ class validate{
             }
 
             if(noSpecialCharecter.test(value) && this.option.noSpecialCharecter){
-                console.log("✅ | no SpecialCharecter ")
                 this.res.optionList.noSpecialCharecter = true
 
                 this.checkingText('noSpecialCharecter')
@@ -593,7 +574,6 @@ class validate{
             //*----------------------------------------------
 
             if(containsNumber.test(value) && this.option.containsNumber){
-                console.log("✅ | contains Number")
                 this.res.optionList.containsNumber = true
 
                 this.checkingText('containsNumber')
@@ -604,7 +584,6 @@ class validate{
             }
 
             if(containsUpperCase.test(value) && this.option.containsUpperCase){
-                console.log("✅ | contains UpperCase")
                 this.res.optionList.containsUpperCase = true
 
                 this.checkingText('containsUpperCase')
@@ -615,7 +594,6 @@ class validate{
             }
 
             if(containsLowerCase.test(value) && this.option.containsLowerCase){
-                console.log("✅ | contains LowerCase")
                 this.res.optionList.containsLowerCase = true
 
                 this.checkingText('containsLowerCase')
@@ -626,7 +604,6 @@ class validate{
             }
 
             if(containsSpecialCharecter.test(value) && this.option.containsSpecialCharecter){
-                console.log("✅ | contains SpecialCharecter ")
                 this.res.optionList.containsSpecialCharecter = true
 
                 this.checkingText('containsSpecialCharecter')
@@ -644,7 +621,6 @@ class validate{
 
             
             if(email.test(value) && this.option.email){
-                console.log("✅ | Email ")
                 this.res.optionList.email = true
 
                 this.checkingText('email')
@@ -655,7 +631,6 @@ class validate{
             }
 
             if(youtubeLink.test(value) && this.option.youtubeLink){
-                console.log("✅ | Youtube Link ")
                 this.res.optionList.youtubeLink = true
 
                 this.checkingText('youtubeLink')
@@ -668,17 +643,13 @@ class validate{
 
       
             if(value.startsWith('kuy')){
-                console.log("✅ | match startsWith ")
                 pass++
             }
 
             if(value.endsWith('eiei')){
-                console.log("✅ | match endsWith ")
                 pass++
             }
 
-            console.log(`Pass : ${pass} / ${max}`)
-            console.log("--------------------------")
 
      
                 this.res.value = value
@@ -690,12 +661,10 @@ class validate{
                 this.optionArr.forEach(item=>{
                     if(typeof item != 'function'){
                         arrResult.push( this.res.optionList[item])
-                        console.log(item)
 
                     }
                 })
 
-                console.log(arrResult)
 
                 this.res.result = arrResult.every(item => item == '1')
                 this.res.pass =  arrResult.filter(value => value === true).length;
@@ -804,7 +773,6 @@ let isclick = false
         if(!username.res.optionList.email){
         }else if(password.value !== passwordConfirm.value || (password.value.length == 0) || passwordConfirm.value.length == 0){
             
-            console.log('pass')
             username.forceUnCheck('matchTo',"Password Matched")
             
         }else{
@@ -818,7 +786,6 @@ let isclick = false
     window.addEventListener('click' ,e=>{
         if(check && isclick){
             isclick = false
-            console.log('click')
         }
 
     })
