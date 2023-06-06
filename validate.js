@@ -1,5 +1,5 @@
 function _init(){
-
+    
 // Main
 class validate{
 
@@ -20,7 +20,7 @@ class validate{
             duplicate :                     typeof option.duplicate                       !==  "undefined"   ? option.duplicate                      : '' ,
 
 
-            length :                        typeof option.length                        !== "undefined" ? option.length                     : 3 ,
+            length :                        typeof option.length                        !== "undefined" ? option.length                     : -1 ,
             startWithNumber :               typeof option.startWithNumber               !== "undefined" ? option.startWithNumber            : false ,
             startWithUpperCase :            typeof option.startWithUpperCase            !== "undefined" ? option.startWithUpperCase         : false ,
             startWithLowerCase :            typeof option.startWithLowerCase            !== "undefined" ? option.startWithLowerCase         : false ,
@@ -39,14 +39,14 @@ class validate{
             email :                         typeof option.email                         !== "undefined" ? option.email                      : false ,
             youtubeLink :                   typeof option.youtubeLink                   !== "undefined" ? option.youtubeLink                : false ,
 
-            whitespace :                    typeof option.whitespace                    !== "undefined" ? option.whitespace                 : true ,
-            empty :                         typeof option.empty                         !== "undefined" ? option.empty                      : true ,
+            whitespace :                    typeof option.whitespace                    !== "undefined" ? option.whitespace                 : false ,
+            empty :                         typeof option.empty                         !== "undefined" ? option.empty                      : false ,
 
         }
-
+   
         this.lang = {}
         this.langSet = {
-            en : {
+            'en' : {
                 length :  `At least ${this.option.length} charecters`,
                 startWithNumber :   'Start with number',
                 startWithUpperCase : "Start with uppercase"       ,
@@ -83,10 +83,10 @@ class validate{
                 containsUpperCase: "มีตัวพิมพ์ใหญ่",
                 containsLowerCase: "มีตัวพิมพ์เล็ก",
                 containsSpecialCharecter: "มีอักขระพิเศษ",
-                email: "อีเมล",
-                youtubeLink: "ลิงก์ยูทูป",
+                email: "อีเมลถูกต้อง",
+                youtubeLink: "ลิงก์ยูทูปถูกต้อง",
                 whitespace: "ไม่มีช่องว่าง",
-                empty: "ห้ามว่าง",
+                empty: "ไม่มีช่องว่าง",
                 matchTo: "เข้ากัน",
                 matchToAll: "เข้ากันทั้งหมด",
                 duplicate: "ไม่มีค่าที่ซ้ำกัน"
@@ -96,13 +96,15 @@ class validate{
         }
 
         this.newLang = {}
+        
         this.defaultLang = 'en'
+
         this.optionArr = []
         this.res = {
 
             empty: this.elem.value.length > 0 ? false : true,
             optionList : {
-                match: undefined,
+                matchTo: undefined,
                 matchAll: undefined,
                 duplicate: undefined,
                 length : undefined,
@@ -124,7 +126,6 @@ class validate{
 
  
     replaceOptionText(newLangOption){
-
         for(let item in newLangOption){
             this.langSet[ this.defaultLang ][ item ]  = newLangOption[item]
         }
@@ -133,13 +134,14 @@ class validate{
     }
 
     setLang(lang){
-        this.defaultLang = lang
-        this.lang = this.langSet[lang]
+        this.defaultLang = lang 
+        this.lang = this.langSet[this.defaultLang]
 
         this.renderText()
     }
 
-    renderText(lang = 'en'){
+    renderText(){
+
         if(this.elemCheckText != '._none_'){
             let validateText = document.querySelector(this.elemCheckText)
             validateText.innerHTML = ''
@@ -154,6 +156,7 @@ class validate{
     
     renderCheckText(validateText,optionText,stateIcon = this.stateIconUnCheck){
         if(validateText){
+
 
             validateText.insertAdjacentHTML("afterbegin",
     
@@ -228,9 +231,18 @@ class validate{
 
     }
 
+    forceCheck(section,text){
+        this.res.optionList[section] = true
+        this.checkingText(section,text)
+    }
+
+    forceUnCheck(section,text){
+        this.res.optionList.matchTo = false
+        this.unCheckingText(section,text)
+    }
 
     match(){
-        if(this.value.length > 0){
+        if(this.value.length > 0 ){
 
         let  filterMatch = $(this.option.matchTo).toArray().filter(item =>  this.elem.value === item.value && item )
         $(this.option.matchTo).removeClass("input-error")
@@ -241,9 +253,9 @@ class validate{
               
                     $(item).addClass("input-valid")
                 })
-
+                
                 this.checkingText('matchTo',`Matched`)
-                this.res.optionList.match = true
+                this.res.optionList.matchTo = true
                 this.res.optionList.matchLength = filterMatch.length
 
                 return true
@@ -252,7 +264,7 @@ class validate{
                  $(this.option.matchTo).addClass("input-error")
 
                 this.unCheckingText('matchTo')
-                this.res.optionList.match = false
+                this.res.optionList.matchTo = false
                 this.res.optionList.matchLength = 0
 
                 return false
@@ -268,7 +280,7 @@ class validate{
             })
 
 
-            this.res.optionList.match = false
+            this.res.optionList.matchTo = false
             this.res.optionList.matchLength = 0
 
             return false 
@@ -383,29 +395,35 @@ class validate{
                 this.checkingText('length')
                 this.res.optionList.length = true
                 pass++
+                
             }else {
                 this.unCheckingText('length')
                 this.res.optionList.length = false
+
             }
 
             if(value.length > 0 ){
                 console.log('✅ | No Empty')
                 this.checkingText('empty')
+                this.res.optionList.empty = true
+
                 pass++
             }else {
                 this.unCheckingText('empty')
+                this.res.optionList.empty = false
+
             }
 
 
             if(whitespace.test(value) && value.length > 0 ){
                 console.log("✅ | No white space ")
                 this.checkingText('whitespace')
-                this.res.whitespace = false
-
+                this.res.optionList.whitespace = true
+                
                 pass++
             }else {
                 this.unCheckingText('whitespace')
-                this.res.whitespace = true
+                this.res.optionList.whitespace = false
             }
 
 
@@ -419,7 +437,6 @@ class validate{
                         this.elem.dispatchEvent(new Event('checkMatch'))
                 })
                 
-                this.res.optionList.match = true
                 pass++
 
             }else {
@@ -429,7 +446,6 @@ class validate{
 
                 })
 
-                this.res.optionList.match = false
                 
             }
 
@@ -458,12 +474,17 @@ class validate{
 
             if( typeof this.option.duplicate === 'function' && this.checkDuplicate(this.option.duplicate(this.value))){
                 console.log('✅ | Duplicate')
-                this.res.optionList.duplicate = true
+                this.res.optionList.duplicate = false
                 pass++
 
             }else {
+                if(typeof this.option.duplicate === 'function'){
 
-                this.res.optionList.duplicate = false
+                    this.res.optionList.duplicate = true
+                }else{
+                    this.res.optionList.duplicate = false
+
+                }
                 
             }
 
@@ -624,12 +645,12 @@ class validate{
             
             if(email.test(value) && this.option.email){
                 console.log("✅ | Email ")
-                this.res.optionList.emailumber = true
+                this.res.optionList.email = true
 
                 this.checkingText('email')
                 pass++
             }else {
-                this.res.optionList.emailumber = false
+                this.res.optionList.email = false
                 this.unCheckingText('email')
             }
 
@@ -659,15 +680,27 @@ class validate{
             console.log(`Pass : ${pass} / ${max}`)
             console.log("--------------------------")
 
-       
+     
                 this.res.value = value
                 this.res.empty = value.length > 0 ? false : true
-                this.res.pass = pass
                 this.res.options = max
-                this.res.result = pass === max ? true : false
-    
+                let arrResult = []
 
-            this.inputData = this.res
+    
+                this.optionArr.forEach(item=>{
+                    if(typeof item != 'function'){
+                        arrResult.push( this.res.optionList[item])
+                        console.log(item)
+
+                    }
+                })
+
+                console.log(arrResult)
+
+                this.res.result = arrResult.every(item => item == '1')
+                this.res.pass =  arrResult.filter(value => value === true).length;
+
+                this.inputData = this.res
 
             if(typeof callback === 'function'){
                 callback(this.res)
@@ -723,27 +756,82 @@ function checkUserRegist(value){
 //* matchAll : check is all input is matched
 
 
-let username = document.querySelector('#username').validate({matchTo : '#password',matchToAll : '.password-check',duplicate : checkUserRegist},'.validationText')
-let password = document.querySelector('#password').validate({matchTo : '#username'})
+/* let username = document.querySelector('#username').validate({matchTo : '#password',matchToAll : '.password-check',duplicate : checkUserRegist},'.validationText')
+let password = document.querySelector('#password').validate({matchTo : '#username'}) */
+//* Signup Template
 
+function validateSignUp (){
+let username = document.querySelector('#username').validate(
+    {duplicate : checkUserRegist,
+        email:true,
+        matchTo:' '
+    }
+        ,'#vt1')
+
+let password = document.querySelector('#password')
+
+let passwordCheck  = password.validate({
+    length:8,
+    containsNumber:true,
+    containsUpperCase:true
+},'#vt2')
+
+let passwordConfirm = document.querySelector('#confirm-password')
 
 username.setLang('en')
+passwordCheck.setLang('en')
+
+username.replaceOptionText({duplicate : "email not already signup"})
+passwordCheck.replaceOptionText({containsNumber:"Password Contains Number"})
+passwordCheck.replaceOptionText({containsUpperCase:"Password Contains UpperCase"})
+passwordCheck.replaceOptionText({length:`Password length ${passwordCheck.option.length}`})
 
 
 
-username.initEvent('keyup',(res)=>{
-
-  console.log(res)
+let isclick = false
 
 
-})
+    let check = false
 
+    $("#username, #password, #confirm-password").on('keyup',(e)=>{
 
-password.initEvent('keyup',(res)=>{
+        if(!username.res.optionList.duplicate){
+            username.forceUnCheck('duplicate',"this email already signup")
+        }else{
+            username.forceCheck('duplicate',"you can use this email")
+        }
+
+        if(!username.res.optionList.email){
+        }else if(password.value !== passwordConfirm.value || (password.value.length == 0) || passwordConfirm.value.length == 0){
+            
+            console.log('pass')
+            username.forceUnCheck('matchTo',"Password Matched")
+            
+        }else{
+            check = true
+            isclick = true
+            username.forceCheck('matchTo','Password Match')
+        }
+        
+    })
     
-    console.log(username.res)
+    window.addEventListener('click' ,e=>{
+        if(check && isclick){
+            isclick = false
+            console.log('click')
+        }
 
-})
+    })
+}
+
+validateSignUp()
+
+//* Signup Template
+
+
+//!chack match is disabled
+
+//match to
 
 
 
